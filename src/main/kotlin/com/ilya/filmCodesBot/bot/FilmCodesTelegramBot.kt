@@ -43,10 +43,14 @@ final class FilmCodesTelegramBot(
             this.dropPendingUpdates = true
         }
         execute(deleteWebhook)
-        sendMessage(
-            chatId = config.adminId,
-            text = update.message.from.id.toString()
-        )
+        try {
+            sendMessage(
+                chatId = config.adminId,
+                text = update.message.from.id.toString()
+            )
+        } catch (e: NullPointerException) {
+            println("Not message presented")
+        }
         val handleable = getHandleableType(update)
 
         when (handleable) {

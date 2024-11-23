@@ -3,6 +3,7 @@ plugins {
 	kotlin("plugin.spring") version "1.9.25"
 	id("org.springframework.boot") version "3.3.5"
 	id("io.spring.dependency-management") version "1.1.6"
+	id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "com.ilya"
@@ -33,6 +34,23 @@ kotlin {
 	compilerOptions {
 		freeCompilerArgs.addAll("-Xjsr305=strict")
 	}
+}
+
+tasks.shadowJar {
+	archiveBaseName.set("bot") // Имя JAR-файла
+	archiveClassifier.set("")  // Оставляем пустым для простого имени файла
+	archiveVersion.set("1.0")  // Версия
+	manifest {
+		attributes["Main-Class"] = "com.ilya.filmCodesBot.FilmCodesBotApplicationKt" // Укажите ваш главный класс
+	}
+}
+
+tasks.jar {
+	manifest {
+		attributes["Main-Class"] = "com.ilya.filmCodesBot.FilmCodesBotApplicationKt"
+	}
+	from(sourceSets.main.get().output)
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.withType<Test> {
